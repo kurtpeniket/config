@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+require "pathname"
+require "fileutils"
+
+project = ARGV[0]
+search_dir = Pathname.new "#{Dir.home}/code"
+search_results = search_dir.glob("**/#{project}")
+dir = search_results[0].to_s
+change_dir = "cd #{dir}"
+sesssion_exists = system "tmux list-sessions | grep #{project}"
+
+if !sesssion_exists
+  system "tmux new-session -d -s #{project}"
+  system "tmux rename-window -t 1 'server'"
+  system "tmux new-window -t #{project}:2 -n 'nvim'"
+  system "tmux send-keys -t 'nvim' '#{change_dir}' C-m 'nvim' C-m"
+  system "tmux select-window -t nvim"
+  system "tmux select-pane -t 1"
+  system "tmux send-keys '#{change_dir}' C-m"
+  system "tmux select-window -t server"
+  system "tmux select-pane -t 0"
+  system "tmux send-keys '#{change_dir}' C-m"
+  system "tmux new-window -t #{project}:3 -n 'terminal'"
+  system "tmux send-keys '#{change_dir}' C-m"
+end
+
+system ("tmux attach-session -t #{project}:1")
+
