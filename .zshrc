@@ -1,21 +1,17 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/kurtpeniket/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
+export OPENAI_API_KEY='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'
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+# ZSH_THEME="lambda-gitster"
+autoload -U promptinit; promptinit
+prompt pure
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -30,14 +26,13 @@ ZSH_THEME="robbyrussell"
 # Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
+# Uncomment one of the following lines to change the auto-update behavior
+# zstyle ':omz:update' mode disabled  # disable automatic updates
+# zstyle ':omz:update' mode auto      # update automatically without asking
+# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+# zstyle ':omz:update' frequency 13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
 # DISABLE_MAGIC_FUNCTIONS="true"
@@ -49,11 +44,12 @@ ZSH_THEME="robbyrussell"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
+# ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# Caution: this setting can cause issues with multiline prompts (zsh 5.7.1 and newer seem to work)
-# See https://github.com/ohmyzsh/ohmyzsh/issues/5765
+# You can also set it to another string to have that shown instead of the default red dots.
+# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
+# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
 # COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
@@ -77,13 +73,7 @@ ENABLE_CORRECTION="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(
-	git
-	vi-mode
-	bundler
-	fzf
-	web-search
-)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting vi-mode web-search)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -112,22 +102,24 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-source ~/powerlevel10k/powerlevel10k.zsh-theme
+# alias git-merged-branches="git branch --merged | egrep -v '(^\*|master|main|dev)'"
+# alias git-merged-branches-d="git branch --merged | egrep -v '(^\*|master|main|dev)' | xargs git branch -d"
+# alias git-remote-merged-branches-d="git fetch --all --prune && git branch -r --merged | egrep -v '(^\*|master|dev)' | sed 's/origin\///' | xargs -n 1 git push origin --delete"
+alias gpggam="git pull ggapps master"
+alias gpo="git push -u origin HEAD"
+alias ssh_4c_prod="ssh deploy@68.183.43.202"
+alias ssh_bs_prod="ssh deploy@104.248.163.55"
+alias ssh_signsolutions="ssh deploy@64.227.46.145"
+alias ssh_wellgiving="ssh deploy@167.172.57.192"
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-## [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-## 
-## export FZF_DEFAULT_OPTS=‘—height=40% —preview=“cat {}” —preview-window=right:60%:wrap’
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-source /Users/kurtpeniket/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# Add colors to Terminal
-export CLICOLOR=1
-export LSCOLORS=ExFxBxDxCxegedabagacad
-export PATH="/usr/local/sbin:$PATH"
+# Enable vi mode
+bindkey -v
+VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+export PATH="/usr/local/sbin:$PATH"
+export DYLD_LIBRARY_PATH=/Library/PostgreSQL/9.3/lib:$DYLD_LIBRARY_PATH
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval "$(direnv hook zsh)"
