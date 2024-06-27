@@ -1,11 +1,22 @@
 #!/usr/bin/env ruby
+
+# This should be in local/bin
+
 require "pathname"
 require "fileutils"
 
 project = ARGV[0]
-search_dir = Pathname.new "#{Dir.home}/code"
-search_results = search_dir.glob("**/#{project}")
-dir = search_results[0].to_s
+# search_dir = Pathname.new "#{Dir.home}/code"
+# search_results = search_dir.glob("**/#{project}")
+# dir = search_results[0].to_s
+base_dir = "#{Dir.home}/code"
+search_dirs = ["gga", "kurtpeniket"]
+dir = search_dirs.lazy.map { |d| Pathname.new("#{base_dir}/#{d}/#{project}") }.find(&:directory?)
+# Ensure the directory is not nil before proceeding
+if dir.nil?
+  puts "Project directory not found in specified locations."
+  exit
+end
 change_dir = "cd #{dir}"
 sesssion_exists = system "tmux list-sessions | grep #{project}"
 
@@ -25,3 +36,5 @@ if !sesssion_exists
 end
 
 system ("tmux attach-session -t #{project}:1")
+
+
