@@ -1,9 +1,9 @@
+zmodload zsh/zprof
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-export OPENAI_API_KEY='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'
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -73,7 +73,7 @@ prompt pure
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting vi-mode web-search)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -98,19 +98,32 @@ source $ZSH/oh-my-zsh.sh
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-#
+
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # alias git-merged-branches="git branch --merged | egrep -v '(^\*|master|main|dev)'"
 # alias git-merged-branches-d="git branch --merged | egrep -v '(^\*|master|main|dev)' | xargs git branch -d"
 # alias git-remote-merged-branches-d="git fetch --all --prune && git branch -r --merged | egrep -v '(^\*|master|dev)' | sed 's/origin\///' | xargs -n 1 git push origin --delete"
+
+# History
+# https://zsh.sourceforge.io/Doc/Release/Options.html (16.2.4 History)
+
+setopt EXTENDED_HISTORY      # Write the history file in the ':start:elapsed;command' format.
+setopt INC_APPEND_HISTORY    # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY         # Share history between all sessions.
+setopt HIST_IGNORE_DUPS      # Do not record an event that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS  # Delete an old recorded event if a new event is a duplicate.
+setopt HIST_IGNORE_SPACE     # Do not record an event starting with a space.
+setopt HIST_SAVE_NO_DUPS     # Do not write a duplicate event to the history file.
+setopt HIST_VERIFY           # Do not execute immediately upon history expansion.
+setopt APPEND_HISTORY        # append to history file (Default)
+setopt HIST_NO_STORE         # Don't store history commands
+setopt HIST_REDUCE_BLANKS    # Remove superfluous blanks from each command line being added to the history.
+
 alias gpggam="git pull ggapps master"
 alias gpo="git push -u origin HEAD"
-alias ssh_4c_prod="ssh deploy@68.183.43.202"
-alias ssh_bs_prod="ssh deploy@104.248.163.55"
-alias ssh_signsolutions="ssh deploy@64.227.46.145"
-alias ssh_wellgiving="ssh deploy@167.172.57.192"
+alias cred="EDITOR="vim" rails credentials:edit" 
 
 # Enable vi mode
 bindkey -v
@@ -119,7 +132,6 @@ VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 export PATH="/usr/local/sbin:$PATH"
-export DYLD_LIBRARY_PATH=/Library/PostgreSQL/9.3/lib:$DYLD_LIBRARY_PATH
-
+# export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$PATH"
+# export PATH="/usr/local/opt/postgresql@16/bin:$PATH"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-eval "$(direnv hook zsh)"
